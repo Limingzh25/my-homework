@@ -1,26 +1,21 @@
-#!/usr/bin/env bash
-set -euo pipefail
 
-# Run inside the folder containing this script (HW0).
-cd "$(dirname "$0")"
+#!/bin/bash
 
-# Create the Pronto project and data directories.
+# Go to the script directory
+cd "$(dirname "$0")" || exit 1
+
+# Create directories
 mkdir -p pronto/data
 
-# Document the dataset.
-echo "Pronto bike-share trip, station, weather, and status data for Seattle (2014-2015)." > pronto/README.txt
+# Create README.txt
+echo "Pronto bike-share data for Seattle, including trip, station, weather, and status information." > pronto/README.txt
 
-# Download the ZIP file into the data directory.
-curl -fL "https://s3.amazonaws.com/pronto-data/open_data_year_one.zip" \
-  -o pronto/data/open_data_year_one.zip
+# Download the data
+curl -L https://s3.amazonaws.com/pronto-data/open_data_year_one.zip -o pronto/data/open_data_year_one.zip
 
-# Extract the ZIP archive into the data directory.
+# Unzip the file
 unzip -o pronto/data/open_data_year_one.zip -d pronto/data
 
-# Display the first ten lines of the trip data CSV.
-trip_file=$(find pronto/data -type f -name '2015_trip_data.csv' -print -quit)
-if [[ -z "$trip_file" ]]; then
-  echo "Error: 2015_trip_data.csv was not found after unzipping." >&2
-  exit 1
-fi
-head "$trip_file"
+# Show the first few lines
+head pronto/data/2015_trip_data.csv
+
